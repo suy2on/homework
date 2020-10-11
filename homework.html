@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script>
+
+        function order() {
+            let name = $('#name').val();
+            let address = $('#address').val();
+            let tel = $('#tel').val();
+            if (name == '') {
+                alert('주문자 성함을 입력해주세요')
+            } else if ($('select[name=num]').val() == 'base') {
+                alert('수량을 입력해주세요')
+            } else if (address == '') {
+                alert('주소를 입력해주세요')
+            } else if (tel == '') {
+                alert('전화번호를 입력해주세요')
+            } else if (tel.length != 13) {
+                alert('휴대폰 번호의 입력형식이 다릅니다.\n010-0000-0000으로 다시 입력해주세요')
+            } else {
+                alert('주문 완료!')
+                location.reload(true);//주문완료후 reload
+            }
+        }
+
+        $(document).ready(function () { //페이지 로딩후에 실행하도록
+            $.ajax({
+                type: "GET", // GET 방식으로 요청한다.
+                url: "https://api.manana.kr/exchange/rate.json",
+                data: {}, // 요청하면서 함께 줄 데이터 (GET 요청시엔 비워두세요)
+                success: function (response) { // 서버에서 준 결과를 response라는 변수에 담음
+                    let rate=response[1]['rate']
+                    $('#rate').text('달러-원 환율:'+rate)//태그안에 text내용만 바꿈
+                }
+            })
+        });
+
+    </script>
+
+    <style>
+
+
+        .picture {
+            width: 500px;
+            height: 450px;
+            background-image: url("https://image.sivillage.com/upload/C00001/goods/org/631/190710000352631.jpg?RS=500&SP=1");
+            margin: 20px auto;
+        }
+
+        .imf, .order {
+            width: 800px;
+            margin: auto;
+
+        }
+
+        .button {
+            width: 100px;
+            margin: 30px auto;
+        }
+
+        .imf {
+            margin-top: 10px;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            font-weight: bold;
+        }
+        #rate{
+            font-weight: bold;
+            color: blue;
+
+        }
+
+    </style>
+
+    <title>나홀로 쇼핑몰</title>
+</head>
+
+<body>
+
+<div class="picture">
+
+</div>
+<div class="imf">
+    <h3 style="display: inline">핸디스팀다리미</h3>
+    가격: 60000원 / 개
+    <br><br>
+    <p>890g의 가벼운 무게로 손목에 무리가 적고 이동이 편리합니다. 또한 약 40초 이내의 퀵 스팀모드 예열로 정신 없이 바쁜 아침에
+        여유를 선사합니다.</p>
+
+</div>
+<div class="order">
+    <h6 id="rate"></h6>
+    <h3>주문하기</h3>
+    <form class="form-horizontal">
+        <div class="form-inline">
+            <label class="col-sm-2 control-label">주문자 성함 : </label>
+            <div class="col-sm-7">
+                <!--input안의 내용을 값으로 받아오기 위해서 id를 붙여준다-->
+                <input id="name" type="text" class="form-control">
+            </div>
+        </div>
+        <br>
+        <div class="form-inline">
+            <label class="col-sm-2 control-label">수량 :</label>
+            <div class="col-sm-7">
+                <select style="width:205px" class="form-control" name="num">
+                    <!--                    option에 value값을 줘서 js에서 $('select[name=num]').val()로 선택상태를 알수있음-->
+                    <option value="base">--수량을 선택하세요--</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="form-inline">
+            <label class="col-sm-2 control-label">주소 :</label>
+            <div class="col-sm-7">
+                <input id="address" type="text" class="form-control">
+            </div>
+        </div>
+        <br>
+        <div class="form-inline">
+            <label class="col-sm-2 control-label">전화번호 :</label>
+            <div class="col-sm-7">
+                <input id="tel" type="text" class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="button">
+    <button onclick="order()" style="width:300px" class="btn btn-default" type="submit">주문하기</button>
+</div>
+</body>
+
+</html>
