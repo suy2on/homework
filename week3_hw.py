@@ -18,13 +18,7 @@ soup = BeautifulSoup(data.text, 'html.parser')
 
 musics=soup.select("#body-content > div.newest-list > div > table > tbody > tr") #여러개 음악 가져오기
 
-#for music in musics:
-    #music.select_one("td.number").span.decompose() #랭크부분의 자식태그 span을 없애준다
 
-    #music_singer=music.select_one("td.info > a.artist")
-    #music_rank=music.select_one("td.number")
-    #music_name = music.select_one("td.info > a.title.ellipsis")
-    #print(music_rank.text.strip(),music_name.text.strip(),music_singer.text)
 
 for music in musics:
     music.select_one("td.number").span.decompose()  # 랭크부분의 자식태그 span을 없애준다
@@ -32,6 +26,8 @@ for music in musics:
     music_singer = music.select_one("td.info > a.artist").text.strip()
     music_rank = music.select_one("td.number").text.strip()
     music_name = music.select_one("td.info > a.title.ellipsis").text.strip()
+    print(music_rank,music_name,music_singer) #출력
+    #db에저장
     db.music_rank.insert_one({
         'rank':music_rank,
         'name':music_name,
